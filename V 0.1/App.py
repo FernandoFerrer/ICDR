@@ -129,13 +129,17 @@ app.layout = html.Div([
                                           style={'background-color': 'rgba(255,255,255,0.5)'},
                                           ),
                                           
-                             html.Img(id='retinography-plot'), #Retinograpy Plot
                            ],
                             style={'width':'20%',
                                    'font-family':'sans-serif'}
                             ),
+            
+                #Retinograpy Plot:
+                html.Div([
+                         dcc.Graph(id='retinography-plot',
+                                       style={'margin': '0 auto'}),
+                        ]),
                    
-                   html.Img(id="body-image"),
                                       
            ], id = 'page-b' ),
            
@@ -173,13 +177,14 @@ def image_numbers(retinopathy_grade,macular_edema_grade,combined_grade):
 
 #Retinography Plot:
 @app.callback(
-    dash.dependencies.Output('retinography-plot','src'),
+    dash.dependencies.Output('retinography-plot','figure'),
     [dash.dependencies.Input('dropdown-4','value')]
 )
-def get_image_fig(idImage):
-    from App_Functions import get_retinography_plot
-    image=get_retinography_plot(idImage)
-    return image
+def get_surface(idImage):
+    from App_Functions import get_retinography_image, get_surface_plot
+    image=get_retinography_image(idImage)
+    figure=get_surface_plot(image)
+    return figure
 
 @app.callback(
     Output(component_id='page-a', component_property='style'),

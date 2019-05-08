@@ -74,8 +74,8 @@ def flat_to_RGB(arr):
     return img[0]
 
 
-"Generate retinograpy figure plot---------------------------------------------"
-def get_retinography_plot(idImage):
+"Generate retinograpy image---------------------------------------------------"
+def get_retinography_image(idImage):
     import pandas as pd
     import pickle
     
@@ -89,4 +89,70 @@ def get_retinography_plot(idImage):
     
     return image
 
-#image=get_retinography_plot(10)
+"Generate retinograpy surface plot---------------------------------------------"
+def get_surface_plot(image):
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import matplotlib.cm as cm
+    import plotly.plotly as py
+    import plotly
+    import plotly.graph_objs as go
+    
+        
+    img1=image[:,:,0]
+    img2=image[:,:,1]
+    img3=image[:,:,2]
+        
+    x=np.linspace(0,5,146)
+    y=np.linspace(5,10,146)
+    X,Y=np.meshgrid(x,y)
+    z1=np.ones((146,146))
+    z2=z1*9
+    z3=z1*20
+    
+    surf1=go.Surface(x=x, y=y, z=z1,
+                 surfacecolor=img1,
+                 showscale=False,
+                 opacity=1
+                )
+    
+    surf2=go.Surface(x=x, y=y, z=z2,
+                 surfacecolor=img2,
+                 showscale=False,
+                 opacity=1
+                )
+    
+    surf3=go.Surface(x=x, y=y, z=z3,
+                 surfacecolor=img3,
+                 showscale=False,
+                 opacity=1
+                )
+    
+    noaxis=dict( 
+                showbackground=False,
+                showgrid=False,
+                showline=False,
+                showticklabels=False,
+                ticks='',
+                title='',
+                zeroline=False)
+    
+    layout = go.Layout(
+             paper_bgcolor='rgba(0,0,0,0)',
+             plot_bgcolor='rgba(0,0,0,0)',
+             autosize=True,
+             height=800,
+             margin=dict(t=5),
+             scene=dict(xaxis=dict(noaxis),
+                         yaxis=dict(noaxis), 
+                         zaxis=dict(noaxis), 
+                         aspectratio=dict(x=1,
+                                          y=1,
+                                          z=1
+                                         ),
+                        )
+            )
+                         
+    fig=go.Figure(data=[surf1,surf2,surf3], layout=layout)
+    #plotly.offline.plot(fig, filename='name.html')
+    return fig
