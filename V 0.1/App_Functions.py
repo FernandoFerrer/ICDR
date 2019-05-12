@@ -81,7 +81,7 @@ def get_retinography_image(idImage):
     
     id_img=int(idImage)
     con=db_connection()
-    query="SELECT * FROM icdr_db.icdr where idImage like %i" %id_img
+    query="SELECT * FROM icdr_db.icdr where idImage=%i" %id_img
     image_data=pd.read_sql_query(query,con)
     con.close()
     image_flat=pickle.loads(image_data['Image'][0])
@@ -142,7 +142,7 @@ def get_surface_plot(image):
              plot_bgcolor='rgba(0,0,0,0)',
              autosize=True,
              height=800,
-             margin=dict(t=5),
+             margin=dict(t=2),
              scene=dict(xaxis=dict(noaxis),
                          yaxis=dict(noaxis), 
                          zaxis=dict(noaxis), 

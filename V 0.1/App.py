@@ -11,6 +11,7 @@ import dash_core_components as dcc
 import dash_html_components as html
 import base64
 import os
+import plotly.graph_objs as go
 
 app = dash.Dash(__name__)
 app.title='ICDR'
@@ -21,7 +22,18 @@ directory = os.getcwd()
 image_filename = directory+'/assets/icon.PNG' #Get the logo image
 encoded_image = base64.b64encode(open(image_filename, 'rb').read()) #Encode the logo image
 
-#data:image/png;base64,{}'.format(encoded_image)
+
+"########################### Visual Components ###############################"
+
+#No axis for graph:
+noaxis=dict( 
+            showbackground=False,
+            showgrid=False,
+            showline=False,
+            showticklabels=False,
+            ticks='',
+            title='',
+            zeroline=False)
 
 "############################ Navigation Menu ################################"
 nav_menu = html.Div([
@@ -65,6 +77,31 @@ nav_menu = html.Div([
                              },
             
                     className=''),
+            
+            
+            html.Li([
+                    dcc.Link('References', href='/page-d')
+                    ],
+            
+                    style = {
+                             'margin':'0',
+                             'padding':'0'
+                             },
+            
+                    className=''),
+            
+            
+            html.Li([
+                    dcc.Link('Contact', href='/page-e')
+                    ],
+            
+                    style = {
+                             'margin':'0',
+                             'padding':'0'
+                             },
+            
+                    className=''),
+            
 
             ],
             
@@ -109,35 +146,58 @@ app.layout = html.Div([
                              dcc.Dropdown(id='dropdown-1',
                                           options=[{'label': i, 'value': i} for i in ['No Retinopathy','Mild Retinopathy','Moderate Retinopathy','Severe Retinopathy']],
                                           placeholder="Select a Retinopathy grade",
-                                          style={'background-color': 'rgba(255,255,255,0.5)'},
+                                          style={'background-color': 'rgba(255,255,255,0.5)',
+                                                 'width':'15vw',
+                                                 'display':'inline-block'},
                                           ),
                                           
                              dcc.Dropdown(id='dropdown-2',
                                           options=[{'label': i, 'value': i} for i in ['No Macular Edema','Moderate Macular Edema','Severe Macular Edema']],
                                           placeholder="Select a macular edema grade",
-                                          style={'background-color': 'rgba(255,255,255,0.5)'},
+                                          style={'background-color': 'rgba(255,255,255,0.5)',
+                                                 'width':'15vw',
+                                                 'display':'inline-block'},
                                           ),
                            
                              dcc.Dropdown(id='dropdown-3',
                                           options=[{'label': i, 'value': i} for i in ['No Risk','Moderate Risk','Severe Risk']],
                                           placeholder="Select a combined grade",
-                                          style={'background-color': 'rgba(255,255,255,0.5)'},
+                                          style={'background-color': 'rgba(255,255,255,0.5)',
+                                                 'width':'15vw',
+                                                 'display':'inline-block'},
                                           ),
                                           
                              dcc.Dropdown(id='dropdown-4',
                                           placeholder="Select an image number",
-                                          style={'background-color': 'rgba(255,255,255,0.5)'},
+                                          style={'background-color': 'rgba(255,255,255,0.5)',
+                                                 'width':'15vw',
+                                                 'display':'inline-block'},
                                           ),
                                           
                            ],
-                            style={'width':'20%',
+                            style={'width':'100%',
                                    'font-family':'sans-serif'}
                             ),
             
                 #Retinograpy Plot:
+                
                 html.Div([
                          dcc.Graph(id='retinography-plot',
-                                       style={'margin': '0 auto'}),
+                                   style={'margin': '0 auto'},
+                                   figure={
+                                           'layout' : go.Layout(
+                                                                 paper_bgcolor='rgba(0,0,0,0)',
+                                                                 plot_bgcolor='rgba(0,0,0,0)',
+                                                                 autosize=True,
+                                                                 height=800,
+                                                                 margin=dict(t=2),
+                                                                 scene=dict(xaxis=dict(noaxis),
+                                                                             yaxis=dict(noaxis), 
+                                                                             zaxis=dict(noaxis), 
+                                                                             ),
+                                                             )
+                                           }
+                                )
                         ]),
                    
                                       
@@ -149,12 +209,32 @@ app.layout = html.Div([
                    
                    html.H4('Diagnosis Assistant')
                    
-           ], id = 'page-c' )],
-                    
-                    
-                    
-                
-          style = {'display':'block'}),
+           ], id = 'page-c' ),
+            
+            
+           #Page d: -----------------------------------------------------------
+           html.Div([
+                   
+                   html.H4('References'),
+                   html.Label(['-Indian Diabetic Retinopathy Image Dataset (IDRiD)  ', html.A('Link', href='https://ieee-dataport.org/open-access/indian-diabetic-retinopathy-image-dataset-idrid', target='_blank')]),
+                   html.H4(''),
+                   html.Label(['-Decencière et al.. Feedback on a publicly distributed database: the Messidor database. Image Analysis & Stereology, v. 33, n. 3, p. 231-234, aug. 2014. ISSN 1854-5165.  ', html.A('Link 1', href='http://www.ias-iss.org/ojs/IAS/article/view/1155',  target='_blank')]),
+                   html.Label(['', html.A('Link 2', href='http://dx.doi.org/10.5566/ias.1155',  target='_blank')]),
+                   html.H4(''),
+                   html.Label(['-Kaggle: Diabetic Retinopathy Detection  ', html.A('Link', href='https://www.kaggle.com/c/diabetic-retinopathy-detection',  target='_blank')]),
+           ], id = 'page-d' ),
+            
+            
+           #Page e: -----------------------------------------------------------
+           html.Div([
+                   
+                   html.H4('Contact')
+                   
+           ], id = 'page-e' ), 
+            
+
+            
+        ],style = {'display':'block'}),
                
 ],
 style={'background-image':'url(/assets/background.PNG/)',
@@ -186,6 +266,7 @@ def get_surface(idImage):
     figure=get_surface_plot(image)
     return figure
 
+"###################### Callbacks for Navigation Bar #########################"
 @app.callback(
     Output(component_id='page-a', component_property='style'),
     [Input('url', 'pathname')])
@@ -213,7 +294,23 @@ def display_page(pathname):
     else:
         return {'display': 'none'}
     
-
+@app.callback(
+    Output(component_id='page-d', component_property='style'),
+    [Input('url', 'pathname')])
+def display_page(pathname):
+    if pathname == '/page-d':
+        return {'display': 'block'}
+    else:
+        return {'display': 'none'}
+    
+@app.callback(
+    Output(component_id='page-e', component_property='style'),
+    [Input('url', 'pathname')])
+def display_page(pathname):
+    if pathname == '/page-e':
+        return {'display': 'block'}
+    else:
+        return {'display': 'none'}
 
 app.css.append_css({"external_url": [
     "https://codepen.io/chriddyp/pen/bWLwgP.css",
