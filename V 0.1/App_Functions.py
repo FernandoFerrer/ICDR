@@ -89,6 +89,18 @@ def get_retinography_image(idImage):
     
     return image
 
+"Get Image Classifications----------------------------------------------------"
+def get_image_classifications(idImage):
+    import pandas as pd
+    
+    id_img=int(idImage)
+    con=db_connection()
+    query="SELECT Retinopathy_Grade, Macular_Edema_Grade, Classification FROM icdr_db.icdr where idImage=%i" %id_img
+    image_data=pd.read_sql_query(query,con)
+    con.close()
+    
+    return image_data
+
 "Generate retinograpy surface plot---------------------------------------------"
 def get_surface_plot(image):
     import numpy as np
@@ -156,3 +168,9 @@ def get_surface_plot(image):
     fig=go.Figure(data=[surf1,surf2,surf3], layout=layout)
     #plotly.offline.plot(fig, filename='name.html')
     return fig
+'''
+import pandas as pd
+classification=get_image_classifications(10)
+jsonclass=classification.to_json(orient='split')
+classification2=pd.read_json(jsonclass, orient='split')
+'''

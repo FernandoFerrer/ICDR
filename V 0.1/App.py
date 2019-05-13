@@ -12,6 +12,7 @@ import dash_html_components as html
 import base64
 import os
 import plotly.graph_objs as go
+import dash_daq as daq
 
 app = dash.Dash(__name__)
 app.title='ICDR'
@@ -139,16 +140,15 @@ app.layout = html.Div([
                
            #Page b: -----------------------------------------------------------    
            html.Div([
-                   
-                   html.H4('Visualize images with different levels of diabetic retinopathy.'),
-                   
+                                      
                    html.Div([
                              dcc.Dropdown(id='dropdown-1',
                                           options=[{'label': i, 'value': i} for i in ['No Retinopathy','Mild Retinopathy','Moderate Retinopathy','Severe Retinopathy']],
                                           placeholder="Select a Retinopathy grade",
                                           style={'background-color': 'rgba(255,255,255,0.5)',
                                                  'width':'15vw',
-                                                 'display':'inline-block'},
+                                                 'display':'inline-block',
+                                                 'vertical-align':'top'},
                                           ),
                                           
                              dcc.Dropdown(id='dropdown-2',
@@ -156,7 +156,8 @@ app.layout = html.Div([
                                           placeholder="Select a macular edema grade",
                                           style={'background-color': 'rgba(255,255,255,0.5)',
                                                  'width':'15vw',
-                                                 'display':'inline-block'},
+                                                 'display':'inline-block',
+                                                 'vertical-align':'top'},
                                           ),
                            
                              dcc.Dropdown(id='dropdown-3',
@@ -164,26 +165,61 @@ app.layout = html.Div([
                                           placeholder="Select a combined grade",
                                           style={'background-color': 'rgba(255,255,255,0.5)',
                                                  'width':'15vw',
-                                                 'display':'inline-block'},
+                                                 'display':'inline-block',
+                                                 'vertical-align':'top'},
                                           ),
                                           
                              dcc.Dropdown(id='dropdown-4',
                                           placeholder="Select an image number",
                                           style={'background-color': 'rgba(255,255,255,0.5)',
                                                  'width':'15vw',
-                                                 'display':'inline-block'},
+                                                 'display':'inline-block',
+                                                 'vertical-align':'top'},
                                           ),
-                                          
+                             daq.Gauge( id='Gauge-1',
+                                        color={"gradient":True,"ranges":{"green":[0,2],"yellow":[2,3],"red":[3,4]}},
+                                        label='Diabetic Retinopathy',
+                                        scale={'start': 0, 'interval': 1, 'labelInterval': 1},
+                                        size=100,
+                                        max=4,
+                                        min=0,
+                                        style={'display':'inline-block',
+                                               'padding-bottom':'2px',
+                                               'font-size':'20px'},
+                                        ),
+                                     
+                             daq.Gauge( id='Gauge-2',
+                                        color={"gradient":True,"ranges":{"green":[0,1],"yellow":[1,1],"red":[1,2]}},
+                                        label='Macular Edema',
+                                        scale={'start': 0, 'interval': 1, 'labelInterval': 1},
+                                        size=100,
+                                        max=2,
+                                        min=0,
+                                        style={'display':'inline-block',
+                                               'padding-bottom':'2px'},
+                                        ),
+                                     
+                             daq.Gauge( id='Gauge-3',
+                                        color={"gradient":True,"ranges":{"green":[0,1],"yellow":[1,1],"red":[1,2]}},
+                                        label='Combined Grade',
+                                        scale={'start': 0, 'interval': 1, 'labelInterval': 1},
+                                        size=100,
+                                        max=2,
+                                        min=0,
+                                        style={'display':'inline-block',
+                                               'padding-bottom':'2px'},
+                                        ),
                            ],
                             style={'width':'100%',
-                                   'font-family':'sans-serif'}
+                                   'font-family':'sans-serif',
+                                   'padding-bottom':'2px'}
                             ),
             
-                #Retinograpy Plot:
-                
+                #Retinograpy Plot:                
                 html.Div([
                          dcc.Graph(id='retinography-plot',
-                                   style={'margin': '0 auto'},
+                                   style={'margin': '0 auto',
+                                          'padding-top':'2px'},
                                    figure={
                                            'layout' : go.Layout(
                                                                  paper_bgcolor='rgba(0,0,0,0)',
@@ -199,6 +235,9 @@ app.layout = html.Div([
                                            }
                                 )
                         ]),
+                
+                #Hidden division to store image classfications:
+                html.Div(id='Image_Classification',style={'display': 'none'}),
                    
                                       
            ], id = 'page-b' ),
@@ -241,7 +280,47 @@ style={'background-image':'url(/assets/background.PNG/)',
        'height':'100vh',
        'background-size':'cover'}
 )
+#Callback to hidden division:
+@app.callback(
+    dash.dependencies.Output('Image_Classification','children'),
+    [dash.dependencies.Input('dropdown-4','value')] #Batch
+    )
+def get_image_class(idImage):
+    from App_Functions import get_image_classifications
+    classifications=get_image_classifications(idImage)
+    return classifications.to_json(orient='split')
 
+#Callbacks to indicators:
+@app.callback(
+    dash.dependencies.Output('Gauge-1','value'),
+    [dash.dependencies.Input('Image_Classification','children')] #Batch
+    )    
+def get_diabetic_retinopathy_grade(json_classification):
+    import pandas as pd
+    classification=pd.read_json(json_classification,orient='split')
+    drg=classification['Retinopathy_Grade'][0]
+    return int(drg)
+
+@app.callback(
+    dash.dependencies.Output('Gauge-2','value'),
+    [dash.dependencies.Input('Image_Classification','children')] #Batch
+    )    
+def get_macular_edema_grade(json_classification):
+    import pandas as pd
+    classification=pd.read_json(json_classification,orient='split')
+    meg=classification['Macular_Edema_Grade'][0]
+    return int(meg)
+
+@app.callback(
+    dash.dependencies.Output('Gauge-3','value'),
+    [dash.dependencies.Input('Image_Classification','children')] #Batch
+    )    
+def get_combined_grade(json_classification):
+    import pandas as pd
+    classification=pd.read_json(json_classification,orient='split')
+    cg=classification['Classification'][0]
+    return int(cg)
+    
 #Options for image numbers:
 @app.callback(
     dash.dependencies.Output('dropdown-4','options'),
