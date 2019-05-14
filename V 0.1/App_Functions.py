@@ -154,7 +154,7 @@ def get_surface_plot(image):
              plot_bgcolor='rgba(0,0,0,0)',
              autosize=True,
              height=800,
-             margin=dict(t=2),
+             margin=dict(t=1),
              scene=dict(xaxis=dict(noaxis),
                          yaxis=dict(noaxis), 
                          zaxis=dict(noaxis), 

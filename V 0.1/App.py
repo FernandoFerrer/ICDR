@@ -41,7 +41,7 @@ nav_menu = html.Div([
     html.Ul([
             
             html.Li([
-                    dcc.Link('AAAAA', href='/page-a',
+                    dcc.Link('AAAAA', href='/Home',
                              
                              style={'background-image':'url(/assets/icon.PNG/)',
                                     'background-size':'contain',
@@ -58,7 +58,7 @@ nav_menu = html.Div([
                     className=''),
 
             html.Li([
-                    dcc.Link('Retinograpy Visualization', href='/page-b')
+                    dcc.Link('Retinograpy Visualization', href='/Retinography-Visualization')
                     ],
 
                     style = {
@@ -69,19 +69,7 @@ nav_menu = html.Div([
                     className=''),
 
             html.Li([
-                    dcc.Link('Diagnosis Assistant', href='/page-c')
-                    ],
-            
-                    style = {
-                             'margin':'0',
-                             'padding':'0'
-                             },
-            
-                    className=''),
-            
-            
-            html.Li([
-                    dcc.Link('References', href='/page-d')
+                    dcc.Link('Diagnosis Assistant', href='/Diagnosis-Assistant')
                     ],
             
                     style = {
@@ -93,7 +81,19 @@ nav_menu = html.Div([
             
             
             html.Li([
-                    dcc.Link('Contact', href='/page-e')
+                    dcc.Link('References', href='/References')
+                    ],
+            
+                    style = {
+                             'margin':'0',
+                             'padding':'0'
+                             },
+            
+                    className=''),
+            
+            
+            html.Li([
+                    dcc.Link('Contact', href='/Contact')
                     ],
             
                     style = {
@@ -129,16 +129,16 @@ app.layout = html.Div([
     
     html.Div( [
             
-            #Page a: ----------------------------------------------------------
+            #Page Home: ----------------------------------------------------------
             html.Div([
             
                     html.H4('Welcome to Image Classifier for Diabetic Retinopathy'),
                         
             
-            ], id = 'page-a' ),
+            ], id = 'Home' ),
                
                
-           #Page b: -----------------------------------------------------------    
+           #Page Retinograpy-Visualization: -----------------------------------------------------------    
            html.Div([
                                       
                    html.Div([
@@ -176,6 +176,12 @@ app.layout = html.Div([
                                                  'display':'inline-block',
                                                  'vertical-align':'top'},
                                           ),
+                                          
+                             html.H4('Space',
+                                     style={'display':'inline-block',
+                                            'color':'rgba(0,0,0,0)'},
+                                     ),
+                                          
                              daq.Gauge( id='Gauge-1',
                                         color={"gradient":True,"ranges":{"green":[0,2],"yellow":[2,3],"red":[3,4]}},
                                         label='Diabetic Retinopathy',
@@ -184,8 +190,8 @@ app.layout = html.Div([
                                         max=4,
                                         min=0,
                                         style={'display':'inline-block',
-                                               'padding-bottom':'2px',
-                                               'font-size':'20px'},
+                                               'padding':'0',
+                                               'margin':'0'},
                                         ),
                                      
                              daq.Gauge( id='Gauge-2',
@@ -196,7 +202,8 @@ app.layout = html.Div([
                                         max=2,
                                         min=0,
                                         style={'display':'inline-block',
-                                               'padding-bottom':'2px'},
+                                               'padding':'0',
+                                               'margin':'0'},
                                         ),
                                      
                              daq.Gauge( id='Gauge-3',
@@ -207,19 +214,21 @@ app.layout = html.Div([
                                         max=2,
                                         min=0,
                                         style={'display':'inline-block',
-                                               'padding-bottom':'2px'},
+                                               'padding':'0',
+                                               'margin':'0'},
                                         ),
                            ],
                             style={'width':'100%',
                                    'font-family':'sans-serif',
-                                   'padding-bottom':'2px'}
+                                   'padding':'0',
+                                   'margin':'0'}
                             ),
             
                 #Retinograpy Plot:                
                 html.Div([
                          dcc.Graph(id='retinography-plot',
                                    style={'margin': '0 auto',
-                                          'padding-top':'2px'},
+                                          'padding-top':'1px'},
                                    figure={
                                            'layout' : go.Layout(
                                                                  paper_bgcolor='rgba(0,0,0,0)',
@@ -240,36 +249,49 @@ app.layout = html.Div([
                 html.Div(id='Image_Classification',style={'display': 'none'}),
                    
                                       
-           ], id = 'page-b' ),
+           ],
+            style={
+                   'padding':'0',
+                   'margin':'0'},
+                    
+            id = 'Retinography-Visualization' ),
            
         
-           #Page c: -----------------------------------------------------------
+           #Page Diagnosis-Assistant: -----------------------------------------------------------
            html.Div([
                    
                    html.H4('Diagnosis Assistant')
                    
-           ], id = 'page-c' ),
+           ], id = 'Diagnosis-Assistant'),
             
             
-           #Page d: -----------------------------------------------------------
+           #Page References: -----------------------------------------------------------
            html.Div([
                    
-                   html.H4('References'),
-                   html.Label(['-Indian Diabetic Retinopathy Image Dataset (IDRiD)  ', html.A('Link', href='https://ieee-dataport.org/open-access/indian-diabetic-retinopathy-image-dataset-idrid', target='_blank')]),
-                   html.H4(''),
-                   html.Label(['-Decencière et al.. Feedback on a publicly distributed database: the Messidor database. Image Analysis & Stereology, v. 33, n. 3, p. 231-234, aug. 2014. ISSN 1854-5165.  ', html.A('Link 1', href='http://www.ias-iss.org/ojs/IAS/article/view/1155',  target='_blank')]),
-                   html.Label(['', html.A('Link 2', href='http://dx.doi.org/10.5566/ias.1155',  target='_blank')]),
-                   html.H4(''),
-                   html.Label(['-Kaggle: Diabetic Retinopathy Detection  ', html.A('Link', href='https://www.kaggle.com/c/diabetic-retinopathy-detection',  target='_blank')]),
-           ], id = 'page-d' ),
+                     html.Div([
+                   
+                               html.H3('References'),
+                               html.Label(['-Indian Diabetic Retinopathy Image Dataset (IDRiD)  ', html.A('Link', href='https://ieee-dataport.org/open-access/indian-diabetic-retinopathy-image-dataset-idrid', target='_blank')]),
+                               html.H4(''),
+                               html.Label(['-Decencière et al.. Feedback on a publicly distributed database: the Messidor database. Image Analysis & Stereology, v. 33, n. 3, p. 231-234, aug. 2014. ISSN 1854-5165.  ', html.A('Link 1', href='http://www.ias-iss.org/ojs/IAS/article/view/1155',  target='_blank')]),
+                               html.Label(['', html.A('Link 2', href='http://dx.doi.org/10.5566/ias.1155',  target='_blank')]),
+                               html.H4(''),
+                               html.Label(['-Kaggle: Diabetic Retinopathy Detection  ', html.A('Link', href='https://www.kaggle.com/c/diabetic-retinopathy-detection',  target='_blank')]),
+                               html.H4(''),
+                               html.Label(['-Source Code in GitHub  ', html.A('https://fernandoferrer.github.io/ICDR/', href='https://fernandoferrer.github.io/ICDR/',  target='_blank')]),
+                               
+                             ],style = {'background-color':'rgba(183,183,183,0.5)',
+                                        'font-size':'medium'},
+                            ),
+           ],
+           id = 'References' ),
             
-            
-           #Page e: -----------------------------------------------------------
+           #Page Contact: -----------------------------------------------------------
            html.Div([
                    
                    html.H4('Contact')
                    
-           ], id = 'page-e' ), 
+           ], id = 'Contact' ), 
             
 
             
@@ -347,46 +369,46 @@ def get_surface(idImage):
 
 "###################### Callbacks for Navigation Bar #########################"
 @app.callback(
-    Output(component_id='page-a', component_property='style'),
+    Output(component_id='Home', component_property='style'),
     [Input('url', 'pathname')])
 def display_page(pathname):
-    if pathname == '/page-a':
+    if pathname == '/Home':
         return {'display': 'block'}
     else:
         return {'display': 'none'}
 
 @app.callback(
-    Output(component_id='page-b', component_property='style'),
+    Output(component_id='Retinography-Visualization', component_property='style'),
     [Input('url', 'pathname')])
 def display_page(pathname):
-    if pathname == '/page-b':
+    if pathname == '/Retinography-Visualization':
         return {'display': 'block'}
     else:
         return {'display': 'none'}
     
 @app.callback(
-    Output(component_id='page-c', component_property='style'),
+    Output(component_id='Diagnosis-Assistant', component_property='style'),
     [Input('url', 'pathname')])
 def display_page(pathname):
-    if pathname == '/page-c':
+    if pathname == '/Diagnosis-Assistant':
         return {'display': 'block'}
     else:
         return {'display': 'none'}
     
 @app.callback(
-    Output(component_id='page-d', component_property='style'),
+    Output(component_id='References', component_property='style'),
     [Input('url', 'pathname')])
 def display_page(pathname):
-    if pathname == '/page-d':
+    if pathname == '/References':
         return {'display': 'block'}
     else:
         return {'display': 'none'}
     
 @app.callback(
-    Output(component_id='page-e', component_property='style'),
+    Output(component_id='Contact', component_property='style'),
     [Input('url', 'pathname')])
 def display_page(pathname):
-    if pathname == '/page-e':
+    if pathname == '/Contact':
         return {'display': 'block'}
     else:
         return {'display': 'none'}
