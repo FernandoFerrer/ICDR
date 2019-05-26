@@ -223,8 +223,9 @@ app.layout = html.Div([
                                    'padding':'0',
                                    'margin':'0'}
                             ),
-            
-                #Retinograpy Plot:                
+                
+                html.Div([
+                #3D Retinograpy Plot:
                 html.Div([
                          dcc.Graph(id='retinography-plot',
                                    style={'margin': '0 auto',
@@ -234,7 +235,7 @@ app.layout = html.Div([
                                                                  paper_bgcolor='rgba(0,0,0,0)',
                                                                  plot_bgcolor='rgba(0,0,0,0)',
                                                                  autosize=True,
-                                                                 height=800,
+                                                                 height=500,
                                                                  margin=dict(t=2),
                                                                  scene=dict(xaxis=dict(noaxis),
                                                                              yaxis=dict(noaxis), 
@@ -243,7 +244,44 @@ app.layout = html.Div([
                                                              )
                                            }
                                 )
-                        ]),
+                        ],
+            
+                        style={
+                               'display':'inline-block',
+                               'width':'50vw'},
+            
+                        ),
+            
+                #2D Retinography Plot:
+                html.Div([
+                        
+                        dcc.Graph(id='retinography-plot2D',
+                                  style={'margin': '0 auto',
+                                          'padding-top':'1px'},
+                                   figure={
+                                           'layout' : go.Layout(
+                                                                 paper_bgcolor='rgba(0,0,0,0)',
+                                                                 plot_bgcolor='rgba(0,0,0,0)',
+                                                                 autosize=True,
+                                                                 height=500,
+                                                                 margin=dict(t=2),
+                                                                 scene=dict(xaxis=dict(noaxis),
+                                                                             yaxis=dict(noaxis), 
+                                                                             zaxis=dict(noaxis), 
+                                                                             ),
+                                                             )
+                                           }
+                                  )
+                        ],
+            
+                         style={
+                               'display':'inline-block',
+                               'width':'40vw',
+                               'vertical-align':'top'},
+            
+                        ), 
+
+                ]),               
                 
                 #Hidden division to store image classfications:
                 html.Div(id='Image_Classification',style={'display': 'none'}),
@@ -364,8 +402,19 @@ def image_numbers(retinopathy_grade,macular_edema_grade,combined_grade):
 def get_surface(idImage):
     from App_Functions import get_retinography_image, get_surface_plot
     image=get_retinography_image(idImage)
-    figure=get_surface_plot(image)
-    return figure
+    figure1=get_surface_plot(image)
+    return figure1
+
+#Retinography Plot 2D:
+@app.callback(
+    dash.dependencies.Output('retinography-plot2D','figure'),
+    [dash.dependencies.Input('dropdown-4','value')]
+)
+def get_2D_plot(idImage):
+    from App_Functions import get_2D_Img
+    figure2=get_2D_Img(idImage)
+    return figure2
+    
 
 "###################### Callbacks for Navigation Bar #########################"
 @app.callback(

@@ -76,8 +76,12 @@ def flat_to_RGB(arr):
 
 "Generate retinograpy image---------------------------------------------------"
 def get_retinography_image(idImage):
+    import os
     import pandas as pd
     import pickle
+    from matplotlib import pyplot as plt
+    
+    directory = os.getcwd()
     
     id_img=int(idImage)
     con=db_connection()
@@ -86,6 +90,11 @@ def get_retinography_image(idImage):
     con.close()
     image_flat=pickle.loads(image_data['Image'][0])
     image=flat_to_RGB(image_flat)
+    
+    #See if the image is in directory and save it of not:
+    images_saved=os.listdir(directory+'/assets/')
+    if str(idImage)+'.png' not in images_saved:
+        plt.imsave(directory+'/assets/'+str(idImage)+'.png',image)
     
     return image
 
@@ -125,19 +134,22 @@ def get_surface_plot(image):
     surf1=go.Surface(x=x, y=y, z=z1,
                  surfacecolor=img1,
                  showscale=False,
-                 opacity=1
+                 opacity=1,
+                 name='R Channel'
                 )
     
     surf2=go.Surface(x=x, y=y, z=z2,
                  surfacecolor=img2,
                  showscale=False,
-                 opacity=1
+                 opacity=1,
+                 name='G Channel'
                 )
     
     surf3=go.Surface(x=x, y=y, z=z3,
                  surfacecolor=img3,
                  showscale=False,
-                 opacity=1
+                 opacity=1,
+                 name='B Channel'
                 )
     
     noaxis=dict( 
@@ -168,6 +180,54 @@ def get_surface_plot(image):
     fig=go.Figure(data=[surf1,surf2,surf3], layout=layout)
     #plotly.offline.plot(fig, filename='name.html')
     return fig
+
+"Generate 2D Image PLot-------------------------------------------------------"
+def get_2D_Img(ID):
+    import os
+    import base64
+    import numpy as np
+    import plotly.graph_objs as go
+    
+
+    directory = os.getcwd()
+    image_filename=directory+'\\assets\\'+str(ID)+'.png'
+    encoded_image=base64.b64encode(open(image_filename, 'rb').read())
+    decoded_image='data:image/png;base64,{}'.format(encoded_image.decode())
+
+    noaxis=dict( 
+                showgrid=False,
+                showline=False,
+                showticklabels=False,
+                ticks='',
+                title='',
+                zeroline=False)
+        
+    trace1= go.Scatter(x=[0,1,2,3,4,5],
+                       y=[0,1,2,3,4,5],
+                       mode = 'markers',
+                       line = dict(color = ('rgba(0,0,0,0)')),
+                       hoverinfo='skip')
+    
+    layout= go.Layout(paper_bgcolor='rgba(0,0,0,0)',
+                      plot_bgcolor='rgba(0,0,0,0)',
+                      xaxis=dict(noaxis),
+                      yaxis=dict(noaxis), 
+                      images= [dict(
+                              source=decoded_image,
+                              xref= "x",
+                              yref= "y",
+                              x= 0,
+                              y= 5,
+                              sizex= 4,
+                              sizey= 7,
+                              opacity= 1,
+                              layer= "below")]
+            )
+    
+    fig=go.Figure(data=[trace1],layout=layout)
+    #py.iplot(fig,filename='EXAMPLES/background')
+    return fig
+
 '''
 import pandas as pd
 classification=get_image_classifications(10)
