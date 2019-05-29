@@ -58,7 +58,7 @@ nav_menu = html.Div([
                     className=''),
 
             html.Li([
-                    dcc.Link('Retinograpy Visualization', href='/Retinography-Visualization')
+                    dcc.Link('Retinography Visualization', href='/Retinography-Visualization')
                     ],
 
                     style = {
@@ -131,8 +131,26 @@ app.layout = html.Div([
             
             #Page Home: ----------------------------------------------------------
             html.Div([
+                    
+                    
+                    html.Div([
+                            html.H2('Welcome to Image Classifier for Diabetic Retinopathy',
+                            style={'text-align':'center'}
+                            ),
+                            
+                            html.Img(src='data:image/png;base64,{}'.format(encoded_image.decode()),
+                                         style = {
+                                                  'display':'block',
+                                                  'margin':'0 auto',
+                                                  },
+                                         ),
+                            
+                            ],
             
-                    html.H4('Welcome to Image Classifier for Diabetic Retinopathy'),
+                            style={'background-color': 'rgba(183,183,183,0.5)',
+                                   },                            
+                            ),
+                    
                         
             
             ], id = 'Home' ),
@@ -143,7 +161,7 @@ app.layout = html.Div([
                                       
                    html.Div([
                              dcc.Dropdown(id='dropdown-1',
-                                          options=[{'label': i, 'value': i} for i in ['No Retinopathy','Mild Retinopathy','Moderate Retinopathy','Severe Retinopathy']],
+                                          options=[{'label': i, 'value': i} for i in ['No Retinopathy','Mild Retinopathy','Moderate Retinopathy','Severe Retinopathy','Proliferative Retinopathy']],
                                           placeholder="Select a Retinopathy grade",
                                           style={'background-color': 'rgba(255,255,255,0.5)',
                                                  'width':'15vw',
@@ -412,7 +430,12 @@ def get_surface(idImage):
 )
 def get_2D_plot(idImage):
     from App_Functions import get_2D_Img
-    figure2=get_2D_Img(idImage)
+    import time
+    try:
+        figure2=get_2D_Img(idImage)
+    except:
+        time.sleep(3)
+        figure2=get_2D_Img(idImage)
     return figure2
     
 
@@ -465,8 +488,11 @@ def display_page(pathname):
 app.css.append_css({"external_url": [
     "https://codepen.io/chriddyp/pen/bWLwgP.css",
     "https://codepen.io/chriddyp/pen/rzyyWo.css",
-    "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+    "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css",
+    "https://codepen.io/chriddyp/pen/brPBPO.css"
 ]})
+               
+app.css.config.serve_locally = False
 
 if __name__ == '__main__':
     app.run_server(debug=True)

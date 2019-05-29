@@ -29,9 +29,9 @@ def get_images_ids(retinopathy_grade,macular_edema_grade,combined_grade):
     con.close()
     
     #Dictionaries for disease levels:
-    r_g_dic={'No Retinopathy':0,'Mild Retinopathy':1,'Moderate Retinopathy':2,'Severe Retinopathy':3} #Retinopathy grade
+    r_g_dic={'No Retinopathy':0,'Mild Retinopathy':1,'Moderate Retinopathy':2,'Severe Retinopathy':3,'Proliferative Retinopathy':4} #Retinopathy grade
     m_e_dic={'No Macular Edema':0,'Moderate Macular Edema':1,'Severe Macular Edema':2} #Macular edema grade
-    c_g_dic={'No Risk':0,'Moderate Risk':1,'Severe Risk':2} #Combined grade
+    c_g_dic={'Low Risk':0,'Moderate Risk':1,'Severe Risk':2} #Combined grade
     
     if retinopathy_grade and not macular_edema_grade and not macular_edema_grade:
         table=table.loc[table['Retinopathy_Grade']==r_g_dic[retinopathy_grade]]
@@ -80,6 +80,7 @@ def get_retinography_image(idImage):
     import pandas as pd
     import pickle
     from matplotlib import pyplot as plt
+    import numpy as np
     
     directory = os.getcwd()
     
@@ -94,7 +95,8 @@ def get_retinography_image(idImage):
     #See if the image is in directory and save it of not:
     images_saved=os.listdir(directory+'/assets/')
     if str(idImage)+'.png' not in images_saved:
-        plt.imsave(directory+'/assets/'+str(idImage)+'.png',image)
+        image_mirrored=np.flipud(image)
+        plt.imsave(directory+'/assets/'+str(idImage)+'.png',image_mirrored)
     
     return image
 
@@ -166,6 +168,7 @@ def get_surface_plot(image):
              plot_bgcolor='rgba(0,0,0,0)',
              autosize=True,
              height=800,
+             width=1000,
              margin=dict(t=1),
              scene=dict(xaxis=dict(noaxis),
                          yaxis=dict(noaxis), 
@@ -188,9 +191,10 @@ def get_2D_Img(ID):
     import numpy as np
     import plotly.graph_objs as go
     
-
     directory = os.getcwd()
+    
     image_filename=directory+'\\assets\\'+str(ID)+'.png'
+                
     encoded_image=base64.b64encode(open(image_filename, 'rb').read())
     decoded_image='data:image/png;base64,{}'.format(encoded_image.decode())
 
