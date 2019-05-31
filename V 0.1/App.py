@@ -116,7 +116,8 @@ nav_menu = html.Div([
 style = {'background-color': 'rgb(111,163,225)',
          'font-size':'3.5vh',
          'margin':'0',
-         'padding':'0'}
+         'padding':'0',
+         'box-shadow':'5px 1px 10px 1px grey'}
 )
 "#############################################################################"
 
@@ -142,12 +143,14 @@ app.layout = html.Div([
                                          style = {
                                                   'display':'block',
                                                   'margin':'0 auto',
+                                                  'width':'40%',
                                                   },
                                          ),
                             
                             ],
             
                             style={'background-color': 'rgba(183,183,183,0.5)',
+                                   'box-shadow':'5px 1px 10px 1px grey'
                                    },                            
                             ),
                     
@@ -337,7 +340,8 @@ app.layout = html.Div([
                                html.Label(['-Source Code in GitHub  ', html.A('https://fernandoferrer.github.io/ICDR/', href='https://fernandoferrer.github.io/ICDR/',  target='_blank')]),
                                
                              ],style = {'background-color':'rgba(183,183,183,0.5)',
-                                        'font-size':'medium'},
+                                        'font-size':'medium',
+                                        'box-shadow':'5px 1px 10px 1px grey'},
                             ),
            ],
            id = 'References' ),
