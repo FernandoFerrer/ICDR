@@ -1,0 +1,32 @@
+.number {
+  text-align: right;
+  padding-left: 5px;
+  font-family: 'Droid Sans Mono', Courier, monospace; }
+.string {
+  text-align: left;
+  border-bottom: thin grey solid;
+  padding-right: 35px; }
+
+table {
+  border-collapse: collapse; }
+thead {
+  /* Prevent thead from repeating itself on print */
+  display: table-row-group; }
+th {
+  text-align: left;
+  font-weight: normal; }
+td {
+  white-space: nowrap;
+  border: thin lightgrey solid;}
+
+th:first-child,
+td:first-child {
+  padding-left: 0; }
+th:last-child,
+td:last-child {
+  padding-right: 0; }
+
+.stripe-even {
+  background-color: rgb(240, 240, 240); }
+.stripe-odd {
+  background-color: rgb(222, 222, 222); }
