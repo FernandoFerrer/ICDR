@@ -173,6 +173,8 @@ style={'background-image':'url(/assets/background.PNG/)',
        'height':'100vh',
        'background-size':'cover'}
 )
+           
+"############### Callbacks for Retinography Visualization ####################"
 #Callback to hidden division:
 @app.callback(
     dash.dependencies.Output('Image_Classification','children'),
@@ -252,7 +254,17 @@ def get_2D_plot(idImage):
         time.sleep(3)
         figure2=get_2D_Img(idImage)
     return figure2
-    
+
+"################### Callbacks for Diagnosis Assistant #######################"
+@app.callback(Output('output-image-upload', 'children'),
+              [Input('upload-image', 'contents')])
+def update_output(content):
+    from App_Functions import get_image
+    if content is not None:
+        children = [
+            get_image(content)]
+        return children
+   
 
 "###################### Callbacks for Navigation Bar #########################"
 @app.callback(

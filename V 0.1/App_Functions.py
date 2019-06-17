@@ -232,6 +232,22 @@ def get_2D_Img(ID):
     #py.iplot(fig,filename='EXAMPLES/background')
     return fig
 
+"Get image from upload--------------------------------------------------------"
+def get_image(contents):
+    import dash_html_components as html
+    return html.Div([
+
+        # HTML images accept base64 encoded strings in the same format
+        # that is supplied by the upload
+        html.Img(src=contents),
+        html.Hr(),
+    ])
+    
+"Convert uploaded image to image----------------------------------------------"
+def convert_str_to_img(str_img):
+    import base64
+    imgdata = base64.decodebytes(str_img)
+
 '''
 import pandas as pd
 classification=get_image_classifications(10)
