@@ -7,6 +7,7 @@ Created on Sun Jun 16 19:50:45 2019
 
 import dash_html_components as html
 import dash_core_components as dcc
+import dash_daq as daq
 
 Diagnosis_Assistant=html.Div([
         
@@ -29,7 +30,7 @@ dcc.Upload(
                 'textAlign': 'center',
                 'display':'block',
                 'margin':'0 auto',
-                'background-color':'rgba(183,183,183,0.5)'
+                'background-image':'linear-gradient(to bottom right, rgba(183,183,183,0.7), rgba(111,163,225,0.7))'
             },
                 
         # Allow multiple files to be uploaded
@@ -38,6 +39,38 @@ dcc.Upload(
 
 html.H1('AAA',style={'color':'rgba(0,0,0,0)'}),  
 
-html.Div(id='output-image-upload'),
+html.Div([
+        
+        html.H1('AAA',style={'color':'rgba(0,0,0,0)',
+                             'display':'inline-block'}),
+
+        html.Img(id='output-image-upload',style={'display':'inline-block'}),
+        
+        html.H1('A',style={'color':'rgba(0,0,0,0)',
+                             'display':'inline-block'}),
+        
+        html.H1(id='Category',style={'color':'rgba(255,255,255,1)',
+                                     'display':'inline-block'}),
+
+        html.H1('A',style={'color':'rgba(0,0,0,0)',
+                             'display':'inline-block'}),
+
+        daq.GraduatedBar(
+                        id='conf-indicator',
+                        color={"ranges":{"red":[0,2.5],"yellow":[2.5,7.5],"green":[7.5,10]}},
+                        showCurrentValue=True,
+                        label="Confidence %",
+                        style={'display':'inline-block'}
+                        )
+
+        ],
+        style={'display':'flex',
+               'justify-content':'center'}
+        ),
+
+#Hidden division to store image classfications:
+html.Div(id='Prediction',style={'display': 'none'}),
+html.Div(id='Confidence',style={'display': 'none'}),
+
   
 ])

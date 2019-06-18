@@ -52,7 +52,7 @@ html.Div([
                 
         ],
 
-        style={'background-color': 'rgba(183,183,183,0.5)',
+        style={'background-image':'linear-gradient(to bottom right, rgba(183,183,183,0.7), rgba(111,163,225,0.7))',
                'box-shadow':'5px 1px 10px 1px grey'
                },                            
         ),            

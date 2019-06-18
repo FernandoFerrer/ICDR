@@ -4,7 +4,7 @@ Created on Mon Feb 11 21:20:18 2019
 
 @author: reeff
 """
-
+#Import packages:
 import dash,copy
 from dash.dependencies import Input, Output, State
 import dash_core_components as dcc
@@ -256,16 +256,26 @@ def get_2D_plot(idImage):
     return figure2
 
 "################### Callbacks for Diagnosis Assistant #######################"
-@app.callback(Output('output-image-upload', 'children'),
+@app.callback(Output('output-image-upload', 'src'),
               [Input('upload-image', 'contents')])
 def update_output(content):
-    from App_Functions import get_image
-    if content is not None:
-        children = [
-            get_image(content)]
-        return children
-   
+    return content
+          
+@app.callback([Output('Prediction','children'),
+               Output('Confidence','children'),
+               Output('Category','children')],
+              [Input('output-image-upload','src')])
+def get_predictions_from_src(src):
+    from App_Functions import get_predictions
+    predictions=get_predictions(src)
+    return predictions[0], predictions[1], predictions[2]
 
+@app.callback(Output('conf-indicator','value'),
+              [Input('Confidence', 'children')])
+def update_conf_indicator(conf):
+    conf_num=float(conf)*10
+    return conf_num
+ 
 "###################### Callbacks for Navigation Bar #########################"
 @app.callback(
     Output(component_id='Home', component_property='style'),

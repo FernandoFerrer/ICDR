@@ -21,7 +21,7 @@ html.Div([
            html.H4(''),
            html.Label(['-Source Code in GitHub  ', html.A('https://fernandoferrer.github.io/ICDR/', href='https://fernandoferrer.github.io/ICDR/',  target='_blank')]),
            
-         ],style = {'background-color':'rgba(183,183,183,0.5)',
+         ],style = {'background-image':'linear-gradient(to bottom right, rgba(183,183,183,0.7), rgba(111,163,225,0.7))',
                     'font-size':'medium',
                     'box-shadow':'5px 1px 10px 1px grey'},
         ),

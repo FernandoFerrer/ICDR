@@ -231,26 +231,68 @@ def get_2D_Img(ID):
     fig=go.Figure(data=[trace1],layout=layout)
     #py.iplot(fig,filename='EXAMPLES/background')
     return fig
-
-"Get image from upload--------------------------------------------------------"
-def get_image(contents):
-    import dash_html_components as html
-    return html.Div([
-
-        # HTML images accept base64 encoded strings in the same format
-        # that is supplied by the upload
-        html.Img(src=contents),
-        html.Hr(),
-    ])
     
-"Convert uploaded image to image----------------------------------------------"
-def convert_str_to_img(str_img):
+"Get Predictions from src image-----------------------------------------------"
+def get_predictions(src):
+    #Import libraries
     import base64
-    imgdata = base64.decodebytes(str_img)
-
-'''
-import pandas as pd
-classification=get_image_classifications(10)
-jsonclass=classification.to_json(orient='split')
-classification2=pd.read_json(jsonclass, orient='split')
-'''
+    import io
+    import numpy as np    
+    from PIL import Image
+    
+    #Import Model
+    from Settings import ICDR_Model, TH
+    
+    #Decode from src to image:
+    m = Image.open(io.BytesIO(base64.b64decode(src.split(',')[1]))) #Get image from src
+    arr=np.asarray(m)[...,:3] #Convert to numpy array and remove transparency layer
+    arr=np.expand_dims(arr,axis=0) #Expand dimension to convert it to keras tensor
+    
+    #Load Model and compile it:
+    from keras.models import load_model
+    import keras_metrics
+    import keras
+    
+    Learning_Rate=0.0001
+    
+    #Define the custom metrics used in the model:
+    Precision=keras_metrics.binary_precision(label=2)
+    Recall=keras_metrics.binary_recall(label=2)
+    
+    #Load the model:
+    model=load_model(ICDR_Model, custom_objects={"binary_precision": Precision,
+                                                      "binary_recall": Recall})
+    #Compile model   
+    model.compile(loss=keras.losses.categorical_crossentropy,
+                  optimizer=keras.optimizers.Adamax(lr=Learning_Rate,
+                                                  beta_1=0.9,
+                                                  beta_2=0.999,
+                                                  epsilon=0.00000001,
+                                                  decay=0.0),
+                  metrics=['accuracy',Precision,Recall])
+    
+    #Get prediction:
+    result=model.predict(arr)
+    
+    #Reset model:
+    keras.backend.clear_session()
+    
+    #Apply Threshold:
+    prob_cat_0=result[0][0]
+    prob_cat_1=result[0][1]
+    prob_cat_2=result[0][2]
+    if prob_cat_2>TH:
+        prediction=2
+        Conf=prob_cat_2
+        Cat='High DR ME Risk'
+    else:
+        if prob_cat_0>prob_cat_1:
+            prediction=0
+            Conf=prob_cat_0
+            Cat='Low DR ME Risk'
+        else:
+            prediction=1
+            Conf=prob_cat_1
+            Cat='Medium DR ME Risk'
+    print(Conf)
+    return str(prediction), str(Conf), Cat
