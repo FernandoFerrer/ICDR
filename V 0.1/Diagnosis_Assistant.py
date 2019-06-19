@@ -37,18 +37,20 @@ dcc.Upload(
         multiple=False
         ),
 
-html.H1('AAA',style={'color':'rgba(0,0,0,0)'}),  
+html.H1('AAA',style={'color':'rgba(0,0,0,0)'}),
 
 html.Div([
         
-        html.H1('AAA',style={'color':'rgba(0,0,0,0)',
-                             'display':'inline-block'}),
-
         html.Img(id='output-image-upload',style={'display':'inline-block'}),
         
-        html.H1('A',style={'color':'rgba(0,0,0,0)',
-                             'display':'inline-block'}),
-        
+        ],
+
+        style={'display':'flex',
+               'justify-content':'center'}
+),
+
+html.Div([
+                
         html.H1(id='Category',style={'color':'rgba(255,255,255,1)',
                                      'display':'inline-block'}),
 
@@ -57,7 +59,7 @@ html.Div([
 
         daq.GraduatedBar(
                         id='conf-indicator',
-                        color={"ranges":{"red":[0,2.5],"yellow":[2.5,7.5],"green":[7.5,10]}},
+                        color={"ranges":{"rgba(255,0,0,0.6)":[0,3],"rgba(255,255,0,0.6)":[3,7],"rgba(69,161,99,0.6)":[7,10]}},
                         showCurrentValue=True,
                         label="Confidence %",
                         style={'display':'inline-block'}

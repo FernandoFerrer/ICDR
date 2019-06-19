@@ -246,6 +246,7 @@ def get_predictions(src):
     #Decode from src to image:
     m = Image.open(io.BytesIO(base64.b64decode(src.split(',')[1]))) #Get image from src
     arr=np.asarray(m)[...,:3] #Convert to numpy array and remove transparency layer
+    arr=arr.astype('float32')/255 #Convert to float
     arr=np.expand_dims(arr,axis=0) #Expand dimension to convert it to keras tensor
     
     #Load Model and compile it:
