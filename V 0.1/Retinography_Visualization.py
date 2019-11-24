@@ -165,7 +165,9 @@ html.Div([
 
     ), 
 
-]),               
+],
+id='retinography-plots-div'
+),               
 
 #Hidden division to store image classfications:
 html.Div(id='Image_Classification',style={'display': 'none'}),

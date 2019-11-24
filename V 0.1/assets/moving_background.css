@@ -1,0 +1,32 @@
+#gradient
+{
+    border:0px solid black;
+    font-size:30px;
+    background-image:linear-gradient(to bottom right, rgba(222,222,222,0.7), rgba(111,163,225,0.7));
+    background-size: 200% 200%;
+    border-bottom-left-radius: 30px;
+    border-bottom-right-radius: 30px;
+    box-shadow:5px 1px 10px 1px grey;
+    margin-left:2vw;
+    margin-right:2vw;
+
+    -webkit-animation: Animation 6s ease infinite;
+    -moz-animation: Animation 6s ease infinite;
+    animation: Animation 6s ease infinite;
+}
+
+@-webkit-keyframes Animation {
+    0%{background-position:10% 0%}
+    50%{background-position:91% 100%}
+    100%{background-position:10% 0%}
+}
+@-moz-keyframes Animation {
+    0%{background-position:10% 0%}
+    50%{background-position:91% 100%}
+    100%{background-position:10% 0%}
+}
+@keyframes Animation { 
+    0%{background-position:10% 0%}
+    50%{background-position:91% 100%}
+    100%{background-position:10% 0%}
+}

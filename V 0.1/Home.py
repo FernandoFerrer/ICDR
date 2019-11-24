@@ -6,6 +6,8 @@ Created on Sun Jun 16 19:39:41 2019
 """
 
 import dash_html_components as html
+import dash_core_components as dcc
+from textwrap import dedent
 import base64
 import os
 
@@ -20,42 +22,133 @@ encoded_image = base64.b64encode(open(image_filename, 'rb').read()) #Encode the 
 Home=html.Div([
         
 html.Div([
-        html.H2('Welcome to Image Classifier for Diabetic Retinopathy',
-        style={'text-align':'center'}
+                                
+        html.H2('Bienvenido a ACRIA: Asistente para la Clasificación de Retinografías mediante Inteligencia Artificial',
+        style={'text-align':'center',
+               'margin-top':'0px',
+               'color':'rgb(255,255,255)'}
         ),
                 
-        #3D Image:    
-            html.Ul(
-                    html.Li([
-                            html.Div([
-                                    
-                                     html.Img(src='data:image/png;base64,{}'.format(encoded_image.decode()),
-                                              style = {
-                                                      'width':'40vw',
-                                                      },
-                                              ),
-                                    
-                                    ],
-        
-                                    className='image'),
-                                    
-                            html.Div(className='shadow'),
-                            
-                            ],
-                            style = {
-                                      'display':'block',
-                                      'margin':'0 auto',
-                                      },
-                            ),
-                       
-                    ),
+        #Logo hover:
+        html.Div([
+                html.Div(
+                        html.Figure(
+                                html.Img(src='assets/icon.PNG',style={'width':'30vw','margin-bottom':'1vh'}),
+                                ),                
+                        ),
+                ],style={'float':'none','margin':'0 auto','margin-bottom':'0.5vh'},className='hover01 column'),
                 
         ],
+        id='gradient',
+        ),
 
-        style={'background-image':'linear-gradient(to bottom right, rgba(183,183,183,0.7), rgba(111,163,225,0.7))',
-               'box-shadow':'5px 1px 10px 1px grey'
-               },                            
-        ),            
+#Horizontal division:
+html.Div([
+        html.H1('-'),
+        ],style={'width':'90vw',
+                 'color':'rgba(0,0,0,0)'}),
+
+#Flip Card1:
+html.Div([
+        html.Div([
+                html.Div([
+                        html.Img(src='/assets/doctor.png',
+                                 style={'width':'10vw'})
+                        ],
+                        className='side'
+                        ),
+                html.Div([
+                        dcc.Markdown(dedent('''
+                                            #### 
+                                            #### ACRIA es una herramienta para el soporte de médicos generales y oftalmólogos. 
+                                            '''
+                                            ))
+                        ],
+                        className='side back'
+                        )
+                ],
+                className='card'
+                )
+        ],
+className='card-container'
+),
+
+#Flip Card 2:
+html.Div([
+        html.Div([
+                html.Div([
+                        html.Img(src='/assets/retinography.png',
+                                 style={'width':'10vw'})
+                        ],
+                        className='side'
+                        ),
+                html.Div([
+                        dcc.Markdown(dedent('''
+                                            #### 
+                                            #### Ha sido diseñada para identificar retinografías y entrenada con más de 7000 imágenes. 
+                                            '''
+                                            ))
+                        ],
+                        className='side back'
+                        )
+                ],
+                className='card'
+                )
+        ],
+className='card-container'
+),
+
+#Flip Card 3:
+html.Div([
+        html.Div([
+                html.Div([
+                        html.Img(src='/assets/ai.png',
+                                 style={'width':'10vw'})
+                        ],
+                        className='side'
+                        ),
+                html.Div([
+                        dcc.Markdown(dedent('''
+                                            #### El sistema utiliza una red neuronal para identificar y clasificar las imágenes de forma similar a como lo haría un médico experimentado. 
+                                            '''
+                                            ))
+                        ],
+                        className='side back'
+                        )
+                ],
+                className='card'
+                )
+        ],
+className='card-container'
+),
+
+#Flip Card 4:
+html.Div([
+        html.Div([
+                html.Div([
+                        html.Img(src='/assets/classification.png',
+                                 style={'width':'10vw'})
+                        ],
+                        className='side'
+                        ),
+                html.Div([
+                        dcc.Markdown(dedent('''
+                                            #### El clasificador está diseñado para dar soporte en la identificación de imágenes con retinopatía diabética y edema macular. 
+                                            '''
+                                            ))
+                        ],
+                        className='side back'
+                        )
+                ],
+                className='card'
+                )
+        ],
+className='card-container'
+),
+
+
+
+      
 ])
 
 '''

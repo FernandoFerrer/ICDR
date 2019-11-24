@@ -2,8 +2,19 @@
 """
 Created on Thu May  2 20:44:51 2019
 
-@author: reeff
+@author: F. Ferrer
 """
+#Imports:
+import pandas as pd
+import os
+import pickle
+from matplotlib import pyplot as plt
+import numpy as np
+import matplotlib.cm as cm
+import plotly.plotly as py
+import plotly
+import plotly.graph_objs as go
+import base64
 
 "Create connection to MySQL db------------------------------------------------"
 def db_connection():
@@ -17,9 +28,7 @@ def db_connection():
 
 
 "Filter id images based on diagnosis criteria---------------------------------"
-def get_images_ids(retinopathy_grade,macular_edema_grade,combined_grade):
-    import pandas as pd
-    
+def get_images_ids(retinopathy_grade,macular_edema_grade,combined_grade):    
     con=db_connection()
     
     query='SELECT icdr.idImage, icdr.Retinopathy_Grade, icdr.Macular_Edema_Grade, icdr.Classification from icdr_db.icdr'
@@ -76,12 +85,6 @@ def flat_to_RGB(arr):
 
 "Generate retinograpy image---------------------------------------------------"
 def get_retinography_image(idImage):
-    import os
-    import pandas as pd
-    import pickle
-    from matplotlib import pyplot as plt
-    import numpy as np
-    
     directory = os.getcwd()
     
     id_img=int(idImage)
@@ -101,9 +104,7 @@ def get_retinography_image(idImage):
     return image
 
 "Get Image Classifications----------------------------------------------------"
-def get_image_classifications(idImage):
-    import pandas as pd
-    
+def get_image_classifications(idImage):    
     id_img=int(idImage)
     con=db_connection()
     query="SELECT Retinopathy_Grade, Macular_Edema_Grade, Classification FROM icdr_db.icdr where idImage=%i" %id_img
@@ -113,15 +114,7 @@ def get_image_classifications(idImage):
     return image_data
 
 "Generate retinograpy surface plot---------------------------------------------"
-def get_surface_plot(image):
-    import numpy as np
-    import matplotlib.pyplot as plt
-    import matplotlib.cm as cm
-    import plotly.plotly as py
-    import plotly
-    import plotly.graph_objs as go
-    
-        
+def get_surface_plot(image):            
     img1=image[:,:,0]
     img2=image[:,:,1]
     img3=image[:,:,2]
@@ -185,12 +178,7 @@ def get_surface_plot(image):
     return fig
 
 "Generate 2D Image PLot-------------------------------------------------------"
-def get_2D_Img(ID):
-    import os
-    import base64
-    import numpy as np
-    import plotly.graph_objs as go
-    
+def get_2D_Img(ID):    
     directory = os.getcwd()
     
     image_filename=directory+'\\assets\\'+str(ID)+'.png'
